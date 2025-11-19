@@ -5,7 +5,7 @@ export const rickMortyFetch = createApi({
     baseQuery: fetchBaseQuery({ baseUrl: 'https://rickandmortyapi.com/api/character'}),
     endpoints: (builder) => ({
         getCharacters: builder.query({
-            query: (limit) => `?limit=${limit}`,
+            query: (limit) => `?pages=${limit}`,
         })
     })
 })
