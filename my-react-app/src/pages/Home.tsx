@@ -48,6 +48,7 @@ const Home = () => {
         <section>
           {characters.map((character) => (
             <div key={character.id}>
+              <h1>{character.name}</h1>
               <h2>{character.status}</h2>
               <p>{character.species}</p>
               <button onClick={() => handleEditCharacter(character.id)}>
