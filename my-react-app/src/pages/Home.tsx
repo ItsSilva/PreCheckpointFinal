@@ -2,11 +2,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import type { RootState } from "../redux/store";
 import { useGetCharactersQuery } from "../services/RickMortyFetch";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   deleteCharacter,
   getCharacters,
 } from "../redux/slices/GetCharactersSlice";
+import type { Characters } from "../redux/slices/GetCharactersSlice";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -16,6 +17,7 @@ const Home = () => {
   const characters = useSelector(
     (state: RootState) => state.characters.characters
   );
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     if (data?.results && characters.length === 0) {
@@ -35,18 +37,36 @@ const Home = () => {
     navigate("/add");
   };
 
+  const handleSearchCharacterByName = (name: string) => {
+    setSearchTerm(name);
+  };
+
+  const filteredCharacters = characters.filter((character: Characters) =>
+    character.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <section>
-      <h1>Rick and Morty Characters</h1>
-      <button onClick={handleAddCharacter}>Add Character</button>
+      <div>
+        <label>Search characters by name:</label>
+        <input
+          type="text"
+          onChange={(name) => handleSearchCharacterByName(name.target.value)}
+        />
+      </div>
+
+      <div>
+        <h1>Rick and Morty Characters</h1>
+        <button onClick={handleAddCharacter}>Add Character</button>
+      </div>
 
       {isLoading && characters.length === 0 ? (
         <p>Loading...</p>
       ) : error ? (
         <p>Error fetching characters</p>
-      ) : characters.length > 0 ? (
+      ) : filteredCharacters.length > 0 ? (
         <section>
-          {characters.map((character) => (
+          {filteredCharacters.map((character) => (
             <div key={character.id}>
               <h1>{character.name}</h1>
               <h2>{character.status}</h2>
