@@ -2,6 +2,7 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 interface Characters {
   id: number;
+  name: string;
   status: string;
   species: string;
 }
