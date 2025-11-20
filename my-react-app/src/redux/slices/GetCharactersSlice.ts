@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
-interface Characters {
+export interface Characters {
   id: number;
   name: string;
   status: string;
