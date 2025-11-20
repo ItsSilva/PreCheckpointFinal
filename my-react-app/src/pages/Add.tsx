@@ -1,17 +1,21 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { addCharacter } from "../redux/slices/GetCharactersSlice";
+import type { RootState } from "../redux/store";
 
 const Add = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const userType = useSelector((state: RootState) => state.user.userType);
     const [name, setName] = useState('');
     const [status, setStatus] = useState('');
     const [species, setSpecies] = useState('');
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (userType !== 'admin') return;
 
         if (name.trim() && status.trim() && species.trim()) {
             const formInfo = {
@@ -29,6 +33,13 @@ const Add = () => {
     }
 
     return (
+        <>
+        {userType !== 'admin' ? (
+            <section>
+                <p>Access denied. Only admins can add characters.</p>
+                <button onClick={() => navigate('/')}>Back</button>
+            </section>
+        ) : (
         <form onSubmit={handleSubmit}>
             <div>
                 <label>Name:</label>
@@ -53,6 +64,8 @@ const Add = () => {
             </div>
             <button type="submit">Add new character</button>
         </form>
+        )}
+        </>
     )
 }
 export default Add;
